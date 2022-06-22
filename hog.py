@@ -5,8 +5,9 @@ from numpy import linalg as LA
 
 IMG = 'person.jpg'
 
-def hog(img_gray, cell_size=8, block_size=2, bins=9):
-    img = img_gray
+def hog(img_path, cell_size=8, block_size=2, bins=9):
+    img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    img = cv2.resize(src=img, dsize=(64, 128))
     h, w = img.shape # 128, 64
     
     # gradient
@@ -48,19 +49,4 @@ def hog(img_gray, cell_size=8, block_size=2, bins=9):
             if np.isnan(feature_tensor[by, bx, :]).any(): # avoid NaN (zero division)
                 feature_tensor[by, bx, :] = v
     
-    return feature_tensor.flatten() # 3780 features
-def main(img_path):
-    img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    img = cv2.resize(src=img, dsize=(64, 128))
-    f = hog(img)
-    print('Extracted feature vector of %s. Shape:' % img_path)
-    print('Feature size:', f.shape)
-    print('Features (HOG):', f)
-    pass
-
-if __name__ == "__main__":
-    print('Start running HOG on image @ %s' % IMG)
-    main(IMG)
-    print('* Follow me @ ' + "\x1b[1;%dm" % (34) + ' https://www.facebook.com/minhng.info/' + "\x1b[0m")
-    print('* Join GVGroup for discussion @ ' + "\x1b[1;%dm" % (34) + 'https://www.facebook.com/groups/ip.gvgroup/' + "\x1b[0m")
-    print('* Thank you ^^~')    
+    return feature_tensor.flatten() # 3780 features 
